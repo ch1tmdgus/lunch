@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meal Info</title>
+    <style>
+        body {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>오늘의 학교 식단 정보</h1>
+    <input type="text" id="schoolCode" value="" readonly>
+    <button onclick="getMealInfo()">Get Meal Info</button>
+    <div id="meal-info"></div>
+
+    <script>
+        function getMealInfo() {
+            var today = new Date();
+            var year = today.getFullYear().toString().substr(2, 2);
+            var month = (today.getMonth() + 1).toString().padStart(2, '0');
+            var day = today.getDate().toString().padStart(2, '0');
+            var schoolCode = year + month + day;
+            document.getElementById('schoolCode').value = schoolCode;
+            var baseURL = "https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=B10&SD_SCHUL_CODE=7010536&MLSV_YMD=";
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', baseURL + schoolCode, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var xmlDoc = xhr.responseXML;
+                    var dishName = xmlDoc.getElementsByTagName('DDISH_NM')[0];
+                    if (dishName) {
+                        document.getElementById('meal-info').innerHTML = dishName.childNodes[0].nodeValue;
+                    } else {
+                        var message = xmlDoc.getElementsByTagName('MESSAGE')[0];
+                        document.getElementById('meal-info').innerHTML = message.childNodes[0].nodeValue;
+                    }
+                }
+            };
+            xhr.send();
+        }
+    </script>
+
+    <h2>A simple website for sunrin</h2>
+</body>
+</html>
