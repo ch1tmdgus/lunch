@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meal Info</title>
+    <style>
+        body {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>선린인터넷고등학교</h1>
+    <p id="today-date"></p>
+    <div id="meal-info"></div>
+
+    <script>
+        function getMealInfo() {
+            var today = new Date();
+            var year = today.getFullYear().toString().substr(2, 2);
+            var month = (today.getMonth() + 1).toString().padStart(2, '0');
+            var day = today.getDate().toString().padStart(2, '0');
+            var schoolCode = year + month + day;
+            var todayDate = `오늘의 날짜 : ${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+            document.getElementById('today-date').innerHTML = todayDate;
+            var baseURL = "https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=B10&SD_SCHUL_CODE=7010536&MLSV_YMD=";
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', baseURL + schoolCode, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var xmlDoc = xhr.responseXML;
+                    var dishName = xmlDoc.getElementsByTagName('DDISH_NM')[0];
+                    if (dishName) {
+                        document.getElementById('meal-info').innerHTML = dishName.childNodes[0].nodeValue;
+                    } else {
+                        document.getElementById('meal-info').innerHTML = "오늘은 급식이 없습니다!";
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        // 자동으로 실행
+        getMealInfo();
+    </script>
+
+    <h2>시이이발 콘디과도 웹사이트 만들 수 있다고 ㅗㅗㅗㅗㅗㅗ</h2>
+</body>
+</html>
