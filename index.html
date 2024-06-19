@@ -6,16 +6,25 @@
   <link rel="stylesheet" as="style" crossorigin
     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link rel="icon" type="image/png" href="./favicon/favicon.png?">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <style>
     body {
       text-align: center;
       font-family: "Pretendard", sans-serif;
+      transition: background-color 0.5s; /* add transition effect */
     }
 
-    .github-logo {
+   .github-logo {
       position: absolute;
       bottom: 10px;
       left: 10px;
+    }
+
+   .dark-mode-toggle {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      cursor: pointer;
     }
 
     input[type="date"] {
@@ -31,6 +40,22 @@
       padding: 10px;
       width: 70px;
     }
+
+    #meal-info {
+      font-size: 20px;
+      transition: color 0.5s; /* add transition effect */
+    }
+
+   .dark-mode {
+      background-color: #333;
+      color: #fff;
+    }
+
+   .dark-mode input[type="date"],
+   .dark-mode button {
+      background-color: #fff;
+      color: #333;
+    }
   </style>
 </head>
 
@@ -43,7 +68,23 @@
   <p id="today-date"></p>
   <div id="meal-info" style="font-size: 20px"></div>
 
+  <span class="dark-mode-toggle" onclick="toggleDarkMode()">
+    <span class="material-symbols-outlined">dark_mode</span>
+  </span>
+
+  <a href="https://github.com/ch1tmdgus/lunch" target="_blank">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/1200px-GitHub_Invertocat_Logo.svg.png"
+      alt="GitHub Logo" class="github-logo" width="30" height="30" />
+  </a>
+
   <script>
+    let darkMode = false;
+
+    function toggleDarkMode() {
+      darkMode =!darkMode;
+      document.body.classList.toggle("dark-mode");
+    }
     function setTodayDateAndGetMealInfo() {
       var today = new Date();
       var year = today.getFullYear().toString();
