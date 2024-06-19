@@ -1,113 +1,110 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>선린 오늘의 급식</title>
-    <link
-      rel="stylesheet"
-      as="style"
-      crossorigin
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
-    />
-    <link rel="icon" type="image/png" href="./favicon/favicon.png?">
-    <style>
-      body {
-        text-align: center;
-        font-family: "Pretendard", sans-serif;
-      }
-     .github-logo {
-        position: absolute;
-        bottom: 10px;
-        left: 10px;
-      }
-      input[type="date"] {
-        font-size: 18px;
-        padding: 10px;
-        width: 200px;
-      }
-      button {
-        font-size: 18px;
-        font-family: "Pretendard";
 
-        padding: 10px;
-        width: 70px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>선린인터넷고 급식</h1>
-    <input type="date" id="date-input" />
-    <button onclick="setTodayDateAndGetMealInfo()">오늘</button>
-    <button onclick="setTomorrowDateAndGetMealInfo()">내일</button>
-    <button onclick="getMealInfo()">검색</button>
-    <p id="today-date"></p>
-    <div id="meal-info"></div>
+<head>
+  <title>선린 오늘의 급식</title>
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="icon" type="image/png" href="./favicon/favicon.png?">
+  <style>
+    body {
+      text-align: center;
+      font-family: "Pretendard", sans-serif;
+    }
 
-    <script>
-      function setTodayDateAndGetMealInfo() {
-        var today = new Date();
-        var year = today.getFullYear().toString();
-        var month = (today.getMonth() + 1).toString().padStart(2, "0");
-        var day = today.getDate().toString().padStart(2, "0");
-        var dateInput = document.getElementById("date-input");
-        dateInput.value = `${year}-${month}-${day}`;
-        getMealInfo();
-      }
+    .github-logo {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+    }
 
-      function setTomorrowDateAndGetMealInfo() {
-        var today = new Date();
-        var tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
-        var year = tomorrow.getFullYear().toString();
-        var month = (tomorrow.getMonth() + 1).toString().padStart(2, "0");
-        var day = tomorrow.getDate().toString().padStart(2, "0");
-        var dateInput = document.getElementById("date-input");
-        dateInput.value = `${year}-${month}-${day}`;
-        getMealInfo();
-      }
+    input[type="date"] {
+      font-size: 18px;
+      padding: 10px;
+      width: 200px;
+    }
 
-      function getMealInfo() {
-        var dateInput = document.getElementById("date-input");
-        var selectedDate = dateInput.value;
-        if (!selectedDate) {
-          alert("날짜를 선택해주세요!");
-          return;
-        }
-        var year = selectedDate.substring(0, 4);
-        var month = selectedDate.substring(5, 7);
-        var day = selectedDate.substring(8, 10);
-        var schoolCode = year.substring(2, 4) + month + day;
-        var todayDate = `선택한 날짜 : ${year}년 ${month}월 ${day}일`;
-        document.getElementById("today-date").innerHTML = todayDate;
-        var baseURL =
-          "https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=B10&SD_SCHUL_CODE=7010536&MLSV_YMD=";
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", baseURL + schoolCode, true);
-        xhr.onload = function () {
-          if (xhr.status === 200) {
-            var xmlDoc = xhr.responseXML;
-            var dishName = xmlDoc.getElementsByTagName("DDISH_NM")[0];
-            if (dishName) {
-              var dishNameText = dishName.childNodes[0].nodeValue;
-              // 괄호 안에 있는 숫자를 빼고 가져옴
-              dishNameText = dishNameText.replace(/\([^)]+\)/g, "");
-              document.getElementById("meal-info").innerHTML = dishNameText;
-            } else {
-              document.getElementById("meal-info").innerHTML =
-                "급식정보가 없습니다...";
-            }
+    button {
+      font-size: 18px;
+      font-family: "Pretendard";
+      font-weight: 500;
+      padding: 10px;
+      width: 70px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>선린인터넷고 급식</h1>
+  <button onclick="setTodayDateAndGetMealInfo()">오늘</button>
+  <button onclick="setTomorrowDateAndGetMealInfo()">내일</button>
+  <input type="date" id="date-input" />
+  <button onclick="getMealInfo()">검색</button>
+  <p id="today-date"></p>
+  <div id="meal-info" style="font-size: 20px"></div>
+
+  <script>
+    function setTodayDateAndGetMealInfo() {
+      var today = new Date();
+      var year = today.getFullYear().toString();
+      var month = (today.getMonth() + 1).toString().padStart(2, "0");
+      var day = today.getDate().toString().padStart(2, "0");
+      var dateInput = document.getElementById("date-input");
+      dateInput.value = `${year}-${month}-${day}`;
+      getMealInfo();
+    }
+
+    function setTomorrowDateAndGetMealInfo() {
+      var today = new Date();
+      var tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+      var year = tomorrow.getFullYear().toString();
+      var month = (tomorrow.getMonth() + 1).toString().padStart(2, "0");
+      var day = tomorrow.getDate().toString().padStart(2, "0");
+      var dateInput = document.getElementById("date-input");
+      dateInput.value = `${year}-${month}-${day}`;
+      getMealInfo();
+    }
+
+    function getMealInfo() {
+      var dateInput = document.getElementById("date-input");
+      var selectedDate = dateInput.value;
+      if (!selectedDate) {
+        alert("날짜를 선택해주세요!");
+        return;
+      }
+      var year = selectedDate.substring(0, 4);
+      var month = selectedDate.substring(5, 7);
+      var day = selectedDate.substring(8, 10);
+      var schoolCode = year.substring(2, 4) + month + day;
+      var todayDate = `선택한 날짜 : ${year}년 ${month}월 ${day}일`;
+      document.getElementById("today-date").innerHTML = todayDate;
+      var baseURL =
+        "https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=B10&SD_SCHUL_CODE=7010536&MLSV_YMD=";
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", baseURL + schoolCode, true);
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          var xmlDoc = xhr.responseXML;
+          var dishName = xmlDoc.getElementsByTagName("DDISH_NM")[0];
+          if (dishName) {
+            var dishNameText = dishName.childNodes[0].nodeValue;
+            dishNameText = dishNameText.replace(/\([^)]+\)/g, "");
+            document.getElementById("meal-info").innerHTML = dishNameText;
+          } else {
+            document.getElementById("meal-info").innerHTML =
+              "급식정보가 없습니다...";
           }
-        };
-        xhr.send();
-      }
-    </script>
+        }
+      };
+      xhr.send();
+    }
+  </script>
 
-    <a href="https://github.com/ch1tmdgus/lunch" target="_blank">
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/1200px-GitHub_Invertocat_Logo.svg.png"
-        alt="GitHub Logo"
-        class="github-logo"
-        width="30"
-        height="30"
-      />
-    </a>
-  </body>
+  <a href="https://github.com/ch1tmdgus/lunch" target="_blank">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/1200px-GitHub_Invertocat_Logo.svg.png"
+      alt="GitHub Logo" class="github-logo" width="30" height="30" />
+  </a>
+</body>
+
 </html>
